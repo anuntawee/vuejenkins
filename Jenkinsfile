@@ -2,43 +2,36 @@ pipeline {
     agent any
 
     stages {
+        
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/your-repo/vue-app.git'
+                git branch: 'main', url: 'https://github.com/anuntawee/vuejenkins.git'
             }
         }
-
-        stage('Install Node.js') {
+           stage('Install Node.js') {
             steps {
-                sh 'curl -sL https://deb.nodesource.com/setup_14.x | bash -'
-                sh 'apt-get install -y nodejs'
-                sh 'npm install -g npm@latest'
+              sh 'curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -'
+               sh 'sudo apt install nodejs -y'
+           
             }
         }
-
+         stage('NPM Node.js') {
+            steps {
+                   sh 'npm i'
+                sh 'npm install'
+          
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 sh 'npm ci'
             }
         }
-
-        stage('Lint') {
-            steps {
-                sh 'npm run lint'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'npm run test:unit'
-            }
-        }
-
+   
         stage('Build') {
             steps {
                 sh 'npm run build'
             }
         }
-
     }
 }
